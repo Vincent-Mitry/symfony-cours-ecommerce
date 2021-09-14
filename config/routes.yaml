@@ -3,5 +3,13 @@ index:
   controller: App\Controller\TestController::index
 
 test:
-  path: /test
+  path: /test/{age<\d+>?0}
+  # {age?0} équivaut au l'attribution de la valeur par défaut: defaults: age: 0
+  # {age<\d+>} même chose pour les requirements
   controller: App\Controller\TestController::test
+  # defaults:
+  #   age: 0
+    # On peut définir une valeur par défaut de l'age (Si rien n'est pas passé en paramètre dans l'UrL, l'age est égal à 0)
+  # requirements: 
+  #   age: \d+
+    # On peut rajouter des options sur nos paramètres: par ex \d+ --> paramètre numérique
