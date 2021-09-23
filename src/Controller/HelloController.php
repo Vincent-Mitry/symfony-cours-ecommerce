@@ -7,6 +7,7 @@ use Cocur\Slugify\Slugify;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 class HelloController {
 
@@ -21,8 +22,9 @@ class HelloController {
      /**
      * @Route("/hello/{name}", name="hello", methods={"GET", "POST"}, host="localhost", schemes={"http", "https"})
      */
-    public function hello(string $name = "World", LoggerInterface $logger, Slugify $slugify)
+    public function hello(string $name = "World", LoggerInterface $logger, Slugify $slugify, Environment $twig)
     {
+        dump($twig);
 
         dump($slugify->slugify("Hello World"));
         // A chaque fois qu'on va appeler cette route, ce message de log va s'afficher dans la console
