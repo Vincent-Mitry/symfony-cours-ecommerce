@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Taxes\Calculator;
+use App\Taxes\Detector;
 use Cocur\Slugify\Slugify;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,8 +23,11 @@ class HelloController {
      /**
      * @Route("/hello/{name}", name="hello", methods={"GET", "POST"}, host="localhost", schemes={"http", "https"})
      */
-    public function hello(string $name = "World", LoggerInterface $logger, Slugify $slugify, Environment $twig)
+    public function hello(string $name = "World", LoggerInterface $logger, Slugify $slugify, Environment $twig, Detector $detector)
     {
+        dump($detector->detect(101));
+        dump($detector->detect(10));
+        
         dump($twig);
 
         dump($slugify->slugify("Hello World"));
