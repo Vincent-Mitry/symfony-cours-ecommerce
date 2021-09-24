@@ -12,25 +12,32 @@ use Twig\Environment;
 
 class HelloController {
 
-    protected $calculator;
+    protected $twig;
 
-    public function __construct(Calculator $calculator)
+    public function __construct(Environment $twig)
     {
-        $this->calculator = $calculator;
+        $this->twig = $twig;
     }
 
     // Pour le controllers (uniquement), on peut l'injecter dans les paramètres d'une méthode
      /**
      * @Route("/hello/{name}", name="hello", methods={"GET", "POST"}, host="localhost", schemes={"http", "https"})
      */
-    public function hello(string $name = "World", Environment $twig)
+    public function hello(string $name = "World")
     {
-        $html = $twig->render('hello.html.twig', [
-            'name' => $name,
-            'formateur1' => ['prenom' => 'Lior', 'nom' => 'Chamla'],
-            'formateur2' => ['prenom' => 'Jean', 'nom' => 'Bonnaud'],
+        return $this->render('hello.html.twig', ['name' => $name]);
+    }
+    /**
+     * @Route("/example", name="example")
+     */
+    public function example() 
+    {
+        return $this->render('example.html.twig', ['age' => 33]);
+    }
 
-        ]);
+    protected function render(string $path, array $variables = [])
+    {
+        $html = $this->twig->render($path, $variables);
         return new Response($html);
-    } 
+    }
 }
