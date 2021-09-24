@@ -23,22 +23,9 @@ class HelloController {
      /**
      * @Route("/hello/{name}", name="hello", methods={"GET", "POST"}, host="localhost", schemes={"http", "https"})
      */
-    public function hello(string $name = "World", LoggerInterface $logger, Slugify $slugify, Environment $twig, Detector $detector)
+    public function hello(string $name = "World", Environment $twig)
     {
-        dump($detector->detect(101));
-        dump($detector->detect(10));
-        
-        dump($twig);
-
-        dump($slugify->slugify("Hello World"));
-        // A chaque fois qu'on va appeler cette route, ce message de log va s'afficher dans la console
-        // $this->logger->info("Mon message de log !");
-        $logger->info("Mon message de log !");
-
-        $tva = $this->calculator->calcul(100);
-
-        dump($tva);
-
-        return new Response("Hello $name");
+        $html = $twig->render('hello.html.twig', ['name' => $name]);
+        return new Response($html);
     } 
 }
