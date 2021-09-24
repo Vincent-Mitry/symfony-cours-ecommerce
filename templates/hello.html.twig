@@ -20,5 +20,12 @@
 				{% endif %}
 			{% endfor %}
 		</ul>
+
+		{# Condition Ternaire #}
+		<ul>
+			{% for age in ages %}
+				<li>{{age >= 18 ? 'Adulte':'Enfant'}}</li>
+			{% endfor %}
+		</ul>
 	</body>
 </html></body></html>
