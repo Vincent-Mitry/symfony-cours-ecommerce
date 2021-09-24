@@ -27,6 +27,9 @@ class HelloController {
     {
         $html = $twig->render('hello.html.twig', [
             'name' => $name,
+            'formateur1' => ['prenom' => 'Lior', 'nom' => 'Chamla'],
+            'formateur2' => ['prenom' => 'Jean', 'nom' => 'Bonnaud'],
+
         ]);
         return new Response($html);
     } 
