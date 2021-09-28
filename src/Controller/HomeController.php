@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -11,16 +13,18 @@ class HomeController extends AbstractController {
     /**
      * @Route("/", name="homepage")
      */
-    public function homepage(ProductRepository $productRepository) 
+    public function homepage(EntityManagerInterface $em) 
     {
-        // count([])
-        // find(id)
-        // findBy([], [])
-        // findOneBy([], [])
-        // findAll()
-        $count = $productRepository->count([]);
+        $product = new Product;
 
-        dump($count);
+        $product->setName('Table en métal')
+                ->setPrice(3000)
+                ->setSlug('table-en-metal');
+
+        $em->persist($product);
+        $em->flush();
+
+        dd($product);
 
         return $this->render('home.html.twig');
     }
