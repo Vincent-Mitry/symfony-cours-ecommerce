@@ -13,19 +13,14 @@ class HomeController extends AbstractController {
     /**
      * @Route("/", name="homepage")
      */
-    public function homepage(EntityManagerInterface $em) 
+    public function homepage(ProductRepository $productRepository) 
     {
-        $product = new Product;
+        $products = $productRepository->findBy([], [], 3);
 
-        $product->setName('Table en métal')
-                ->setPrice(3000)
-                ->setSlug('table-en-metal');
+        dump($products);
 
-        $em->persist($product);
-        $em->flush();
-
-        dd($product);
-
-        return $this->render('home.html.twig');
+        return $this->render('home.html.twig', [
+            'products' => $products
+        ]);
     }
 }
