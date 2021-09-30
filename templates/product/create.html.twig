@@ -7,4 +7,25 @@
 {% block body %}
 	<h1>Nouveau produit</h1>
 
-	{{ form(formView) }}{% endblock %}
+	{# {{ form(formView) }} #}
+
+	{{ form_start(formView )}}
+
+	{{ form_errors(formView )}}
+
+	{# {{ form_widget(formView )}} #}
+
+	{{ form_row(formView.name )}}
+	{{ form_row(formView.shortDescription )}}
+	{{ form_row(formView.price )}}
+	{{ form_row(formView.category )}}
+
+
+	<button class="btn btn-primary">
+		<i class="fas fa-save"></i>
+		Créer le produit
+	</button>
+
+	{{ form_end(formView )}}
+
+{% endblock %}
