@@ -1,14 +1,16 @@
 {% extends "base.html.twig" %}
 
-{# le tag 'form_theme' permet de dire à twig que concernant le formulaire 'formView' on veut utiliser un thème de formulaire se trouvant dans ce fichier ('_self') #}
-{% form_theme formView _self %}
+{# le tag 'form_theme' permet de dire à twig que concernant le formulaire 'formView' on veut utiliser un thème bootstrap présent dans le fichier ('bootstrap_4_layout.html.twig') #}
+{# {% form_theme formView 'bootstrap_4_layout.html.twig' %} -> ligne commentée car le choix du thème est configuré dans le ficher config/packages/twig.yaml #}
 
-{% block title %}
-	Création d'un produit
+	{% block title %}
+Création d'un produit
 {% endblock %}
 
-{% block body %}
-	<h1>Nouveau produit</h1>
+	{% block body %}
+		<h1>
+	Nouveau produit
+	</h1>
 
 	{# {{ form(formView) }} #}
 
@@ -18,8 +20,7 @@
 
 	{# {{ form_widget(formView )}} #}
 
-	<div class="row">
-		<div class="col">
+		<div class="row"> <div class="col">
 			{{ form_row(formView.name )}}
 			{{ form_row(formView.price )}}
 		</div>
@@ -36,14 +37,4 @@
 
 	{{ form_end(formView )}}
 
-{% endblock %}
-
-{# La variable 'form' ci-dessous représente formView.name, formView.price etc.  #}
-{% block form_row %}
-	<div class="form-group">
-		{{ form_label(form) }}
-		{{ form_widget(form, {'attr': {'class': 'form-control'}}) }}
-		{{ form_help(form) }}
-		{{ form_errors(form) }}
-	</div>
 {% endblock %}
