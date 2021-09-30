@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -12,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -71,8 +73,9 @@ class ProductController extends AbstractController
     /**
      *@Route("/admin/product/create", name="product_create")
      */
-    public function create(FormFactoryInterface $factory) 
+    public function create(FormFactoryInterface $factory, Request $request) 
     {
+        
         $builder = $factory->createBuilder();
 
         $builder->add('name', TextType::class, [
@@ -105,6 +108,19 @@ class ProductController extends AbstractController
 
         $form = $builder->getForm();
 
+        // On demande à notre formulaire de gérer la requête 
+        $form->handleRequest($request);
+        
+        if($form->isSubmitted()) {
+            $data = $form->getData();
+
+            $product = new Product;
+            $product->setName($data['name'])
+                    ->setShortDescription($data['shortDescription'])
+                    ->setPrice($data['price'])
+                    ->setCategory($data['category']);
+        }
+        
         $formView = $form->createView();
 
         return $this->render('product/create.html.twig', [
