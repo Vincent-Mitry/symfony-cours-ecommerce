@@ -79,12 +79,10 @@ class ProductController extends AbstractController
     /**
      *@Route("/admin/product/create", name="product_create")
      */
-    public function create(FormFactoryInterface $factory, Request $request, SluggerInterface $slugger, EntityManagerInterface $em) 
+    public function create(Request $request, SluggerInterface $slugger, EntityManagerInterface $em) 
     {
         
-        $builder = $factory->createBuilder(ProductType::class);
-
-        $form = $builder->getForm();
+        $form  = $this->createForm(ProductType::class);
 
         // En gérant la requête, un objet de Product a été créé et lorsqu'un champ name a été rempli, la fonction setName est appelée, etc. 
         $form->handleRequest($request);
