@@ -77,19 +77,48 @@ class ProductController extends AbstractController
     }
 
     /**
+     *@Route("/admin/product/{id}/edit", name="product_edit")
+     */
+    public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em)
+    {
+        $product = $productRepository->find($id);
+
+        $form = $this->createForm(ProductType::class, $product); 
+
+        // ligne 89 équivaut à passer $product en paramètre (ligne 86) -> permet d'avoir les champs du formulaire pré-remplis avec les infos du produit
+        // $form->setData($product);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted())
+        {
+            $em->flush();
+
+            dd($product);
+        }
+
+        $formView = $form->createView();
+
+        return $this->render('product/edit.html.twig', [
+            'product' => $product,
+            'formView' => $formView
+        ]);
+    }
+
+    /**
      *@Route("/admin/product/create", name="product_create")
      */
     public function create(Request $request, SluggerInterface $slugger, EntityManagerInterface $em) 
     {
-        
-        $form  = $this->createForm(ProductType::class);
+        $product = new Product;
+
+        $form  = $this->createForm(ProductType::class, $product);
 
         // En gérant la requête, un objet de Product a été créé et lorsqu'un champ name a été rempli, la fonction setName est appelée, etc. 
         $form->handleRequest($request);
         
         if($form->isSubmitted()) {
            
-            $product = $form->getData();
             $product->setSlug(strtolower($slugger->slug($product->getName())));
 
             $em->persist($product);
