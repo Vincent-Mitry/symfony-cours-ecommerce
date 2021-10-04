@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -79,7 +80,7 @@ class ProductController extends AbstractController
     /**
      *@Route("/admin/product/{id}/edit", name="product_edit")
      */
-    public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em)
+    public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator)
     {
         $product = $productRepository->find($id);
 
@@ -94,7 +95,19 @@ class ProductController extends AbstractController
         {
             $em->flush();
 
-            dd($product);
+            // $url = $urlGenerator->generate('product_show', [
+            //     'category_slug' => $product->getCategory()->getSlug(),
+            //     'slug' => $product->getSlug()
+            // ]);
+
+            
+            // $response = new RedirectResponse($url);
+            // return $response;
+
+            return $this->redirectToRoute('product_show', [
+                'category_slug' => $product->getCategory()->getSlug(),
+                'slug' => $product->getSlug()
+            ]);
         }
 
         $formView = $form->createView();
@@ -124,7 +137,10 @@ class ProductController extends AbstractController
             $em->persist($product);
             $em->flush();
             
-            dd($product);
+            return $this->redirectToRoute('product_show', [
+                'category_slug' => $product->getCategory()->getSlug(),
+                'slug' => $product->getSlug()
+            ]);
         }
 
         $formView = $form->createView();
