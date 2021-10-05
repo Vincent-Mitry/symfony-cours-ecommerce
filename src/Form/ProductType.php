@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class ProductType extends AbstractType
 {
@@ -41,14 +43,34 @@ class ProductType extends AbstractType
                     'attr' => ['placeholder' => 'Tapez une URL d\'image !']
                 ])
                 ->add('category', EntityType::class, [
-                    'label' => 'Catégorie',
-                    'attr' => ['class' => 'form-control'],
-                    'placeholder' => 'Choisir une catégorie',
-                    'class' => Category::class,
-                    'choice_label' => function (Category $category) {
-                        return strtoupper($category->getName());
-                    }
+                            'label' => 'Catégorie',
+                            'attr' => ['class' => 'form-control'],
+                            'placeholder' => 'Choisir une catégorie',
+                            'class' => Category::class,
+                            'choice_label' => function (Category $category) {
+                                return strtoupper($category->getName());
+                            }
                 ]);
+
+            $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
+                $form = $event->getForm();
+
+                /** @var Product */
+                $product = $event->getData();
+
+                // if($product->getId() === null) {
+                //     $form->add('category', EntityType::class, [
+                //         'label' => 'Catégorie',
+                //         'attr' => ['class' => 'form-control'],
+                //         'placeholder' => 'Choisir une catégorie',
+                //         'class' => Category::class,
+                //         'choice_label' => function (Category $category) {
+                //             return strtoupper($category->getName());
+                //         }
+                //     ]);
+                // }
+
+            });
     }
 
     public function configureOptions(OptionsResolver $resolver)
