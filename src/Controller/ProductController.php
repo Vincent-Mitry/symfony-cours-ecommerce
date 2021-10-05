@@ -86,9 +86,6 @@ class ProductController extends AbstractController
 
         $form = $this->createForm(ProductType::class, $product); 
 
-        // ligne 89 équivaut à passer $product en paramètre (ligne 86) -> permet d'avoir les champs du formulaire pré-remplis avec les infos du produit
-        // $form->setData($product);
-
         $form->handleRequest($request);
 
         if($form->isSubmitted())
