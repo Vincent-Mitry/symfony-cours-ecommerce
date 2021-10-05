@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Form\DataTransformer\CentimesTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -37,7 +38,8 @@ class ProductType extends AbstractType
                     'label' => 'Prix du produit',
                     'attr' => [
                         'placeholder' => 'Tapez le prix du produit en €'
-                    ]
+                    ],
+                    'divisor' => 100
                 ])
                 ->add('mainPicture', UrlType::class, [
                     'label' => 'Image du produit',
@@ -53,44 +55,10 @@ class ProductType extends AbstractType
                             }
                 ]);
             
-            $builder->get('price')->addModelTransformer(new CallbackTransformer(
-                function($value){
-                    if ($value === null){
-                        return;
-                    }
+            // ligne 59 équivaut à ligne 42 : le divisor est intégré dans la classe MoneyType
+            // $builder->get('price')->addModelTransformer(new CentimesTransformer);
 
-                    return $value / 100;
-                },
-                function($value) {
-                    if ($value === null){
-                        return;
-                    }
-
-                    return $value * 100;
-                }
-            ));
-
-            // $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
-            //     $form = $event->getForm();
-
-            //     /** @var Product */
-            //     $product = $event->getData();
-
-                // if($product->getId() === null) {
-                //     $form->add('category', EntityType::class, [
-                //         'label' => 'Catégorie',
-                //         'attr' => ['class' => 'form-control'],
-                //         'placeholder' => 'Choisir une catégorie',
-                //         'class' => Category::class,
-                //         'choice_label' => function (Category $category) {
-                //             return strtoupper($category->getName());
-                //         }
-                //     ]);
-                // }
-
-            // });
-    }
-
+    }                  
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
