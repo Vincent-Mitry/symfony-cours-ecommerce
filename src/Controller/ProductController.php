@@ -91,9 +91,7 @@ class ProductController extends AbstractController
     {
         $product = $productRepository->find($id);
 
-        $form = $this->createForm(ProductType::class, $product, [
-            "validation_groups" => ["large-name", "with-price"]
-        ]); 
+        $form = $this->createForm(ProductType::class, $product); 
 
         $form->handleRequest($request);
 
@@ -127,7 +125,7 @@ class ProductController extends AbstractController
         // En gérant la requête, un objet de Product a été créé et lorsqu'un champ name a été rempli, la fonction setName est appelée, etc. 
         $form->handleRequest($request);
         
-        if($form->isSubmitted()) {
+        if($form->isSubmitted() && $form->isValid()) {
            
             $product->setSlug(strtolower($slugger->slug($product->getName())));
 
