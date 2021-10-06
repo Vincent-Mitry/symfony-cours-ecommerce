@@ -25,6 +25,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\LessThan;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
@@ -80,8 +84,27 @@ class ProductController extends AbstractController
     /**
      *@Route("/admin/product/{id}/edit", name="product_edit")
      */
-    public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator)
+    public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em, ValidatorInterface $validator)
     {
+        $age = - 50;
+
+        $resultat = $validator->validate($age, [
+            new LessThanOrEqual([
+                'value' => 120,
+                'message' => "L'âge doit être inférieur ou égal à {{ compared_value }} mais vous avez donné {{ value }}" 
+            ]),
+            new GreaterThan([
+                'value' => 0,
+                'message' => "L'âge doit être supérieur à 0"
+            ])
+        ]);
+
+        if($resultat->count() > 0) {
+            dd("Il y a des erreurs", $resultat);
+        }
+
+        dd("Tout va bien");
+
         $product = $productRepository->find($id);
 
         $form = $this->createForm(ProductType::class, $product); 
@@ -91,15 +114,6 @@ class ProductController extends AbstractController
         if($form->isSubmitted())
         {
             $em->flush();
-
-            // $url = $urlGenerator->generate('product_show', [
-            //     'category_slug' => $product->getCategory()->getSlug(),
-            //     'slug' => $product->getSlug()
-            // ]);
-
-            
-            // $response = new RedirectResponse($url);
-            // return $response;
 
             return $this->redirectToRoute('product_show', [
                 'category_slug' => $product->getCategory()->getSlug(),
