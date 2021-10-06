@@ -1,0 +1,10 @@
+{% extends 'bootstrap_4_layout.html.twig' %}
+
+{% block form_errors %}
+
+	{% for error in errors %}
+		<br><span class="badge bg-danger">Erreur</span>
+		<small class="text-danger">{{ error.message }}</small>
+	{% endfor %}
+
+{% endblock %}
