@@ -1,4 +1,5 @@
 {% extends "base.html.twig" %}
+{% form_theme formView 'shared/_formErrors.html.twig' %}
 
 {# le tag 'form_theme' permet de dire à twig que concernant le formulaire 'formView' on veut utiliser un thème bootstrap présent dans le fichier ('bootstrap_4_layout.html.twig') #}
 {# {% form_theme formView 'bootstrap_4_layout.html.twig' %} -> ligne commentée car le choix du thème est configuré dans le ficher config/packages/twig.yaml #}

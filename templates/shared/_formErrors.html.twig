@@ -3,8 +3,17 @@
 {% block form_errors %}
 
 	{% for error in errors %}
-		<br><span class="badge bg-danger">Erreur</span>
+		<br><span class="badge bg-danger mb-2">Erreur</span>
 		<small class="text-danger">{{ error.message }}</small>
 	{% endfor %}
 
+{% endblock %}
+
+{% block form_row %}
+	<div class="form-group mb-2">
+		{{ form_label(form) }}
+		{{ form_widget(form, {'attr': {'class': 'form-control'}}) }}
+		{{ form_help(form) }}
+		{# {{ form_errors(form) }} #}
+	</div>
 {% endblock %}
