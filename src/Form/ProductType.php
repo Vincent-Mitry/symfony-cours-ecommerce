@@ -33,7 +33,8 @@ class ProductType extends AbstractType
                     'label' => 'Description courte',
                     'attr' => [
                         'placeholder' => 'Tapez une description assez courte mais parlante pour le visiteur'
-                    ]
+                    ],
+                    'required' => false
                 ])
                 ->add('price', MoneyType::class, [
                     'label' => 'Prix du produit',
@@ -45,7 +46,8 @@ class ProductType extends AbstractType
                 ])
                 ->add('mainPicture', UrlType::class, [
                     'label' => 'Image du produit',
-                    'attr' => ['placeholder' => 'Tapez une URL d\'image !']
+                    'attr' => ['placeholder' => 'Tapez une URL d\'image !'],
+                    'required' => false
                 ])
                 ->add('category', EntityType::class, [
                             'label' => 'Catégorie',
