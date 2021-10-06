@@ -25,9 +25,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\LessThan;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
@@ -86,18 +89,28 @@ class ProductController extends AbstractController
      */
     public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em, ValidatorInterface $validator)
     {
-        $age = - 50;
+        $client = [
+            'nom' => '',
+            'prenom' => 'Jean',
+            'voiture' => [
+                'marque' => '',
+                'couleur' => 'Verte'
+            ]
+        ];
 
-        $resultat = $validator->validate($age, [
-            new LessThanOrEqual([
-                'value' => 120,
-                'message' => "L'âge doit être inférieur ou égal à {{ compared_value }} mais vous avez donné {{ value }}" 
-            ]),
-            new GreaterThan([
-                'value' => 0,
-                'message' => "L'âge doit être supérieur à 0"
+        $collection = new Collection([
+            'nom' => new NotBlank(['message' => "Le nom doit être rempli !"]),
+            'prenom' => [
+                new NotBlank(['message' => "Le prénom doit être rempli !"]),
+                new Length(['min' => 3, 'minMessage' => "Le prénom doit contenir au moins 3 caractères"])
+            ],
+            'voiture' => new Collection([
+                'marque' => new NotBlank(['message' => 'Veuillez renseigner la marque de la voiture']),
+                'couleur' => new NotBlank(['message' => 'Veuillez renseigner la couleur de la voiture'])
             ])
         ]);
+
+        $resultat = $validator->validate($client, $collection);
 
         if($resultat->count() > 0) {
             dd("Il y a des erreurs", $resultat);
