@@ -89,28 +89,9 @@ class ProductController extends AbstractController
      */
     public function edit($id, ProductRepository $productRepository, Request $request, EntityManagerInterface $em, ValidatorInterface $validator)
     {
-        $client = [
-            'nom' => '',
-            'prenom' => 'Jean',
-            'voiture' => [
-                'marque' => '',
-                'couleur' => 'Verte'
-            ]
-        ];
+        $product = new Product;
 
-        $collection = new Collection([
-            'nom' => new NotBlank(['message' => "Le nom doit être rempli !"]),
-            'prenom' => [
-                new NotBlank(['message' => "Le prénom doit être rempli !"]),
-                new Length(['min' => 3, 'minMessage' => "Le prénom doit contenir au moins 3 caractères"])
-            ],
-            'voiture' => new Collection([
-                'marque' => new NotBlank(['message' => 'Veuillez renseigner la marque de la voiture']),
-                'couleur' => new NotBlank(['message' => 'Veuillez renseigner la couleur de la voiture'])
-            ])
-        ]);
-
-        $resultat = $validator->validate($client, $collection);
+        $resultat = $validator->validate($product);
 
         if($resultat->count() > 0) {
             dd("Il y a des erreurs", $resultat);
