@@ -4,3 +4,5 @@ twig:
         - bootstrap_4_layout.html.twig
         # - autre-theme.html.twig
         # - dernier-theme.html.twig
+    globals:
+        categoryRepository: "@App\\Repository\\CategoryRepository"
