@@ -4,6 +4,7 @@ namespace App\Security;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -11,6 +12,13 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class LoginFormAuthenticator extends AbstractGuardAuthenticator
 {
+    protected $encoder;
+
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
     public function supports(Request $request)
     {
         // dd($request);        
@@ -20,17 +28,21 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
 
     public function getCredentials(Request $request)
     {
-        // todo
+        // dd($request);
+        return $request->request->get('login'); // array avec 3 infos
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        // todo
+        return $userProvider->loadUserByUsername($credentials['email']);
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        // todo
+        // On vérifie que le MDP fourni correspond au MDP de la BDD
+        // $credentials['password'] => $user->getPassword
+
+        return $this->encoder->isPasswordValid($user, $credentials['password']);
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
@@ -40,7 +52,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
     {
-        // todo
+        dd("Success");
     }
 
     public function start(Request $request, AuthenticationException $authException = null)
