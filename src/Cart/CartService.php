@@ -44,6 +44,11 @@ class CartService
 
         foreach($this->session->get('cart', []) as $id => $qty) {
             $product = $this->productRepository->find($id);
+            
+            // Si le produit n'existe pas, on demande à la boucle de continuer
+            if(!$product) {
+                continue;
+            }
 
             $total += $product->getPrice() * $qty;
         }
@@ -59,10 +64,11 @@ class CartService
         foreach($this->session->get('cart', []) as $id => $qty) {
             $product = $this->productRepository->find($id);
 
-            $detailedCart[] = [
-                'product' => $product,
-                'qty' => $qty
-            ];
+            if(!$product) {
+                continue;
+            }
+
+            $detailedCart[] = new CartItem($product, $qty);
         }
 
         return $detailedCart;
