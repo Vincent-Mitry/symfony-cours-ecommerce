@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,7 +16,7 @@ class CartController extends AbstractController
     /**
      * @Route("/cart/add/{id}", name="cart_add", requirements={"id":"\d+"})
      */
-    public function add($id, ProductRepository $productRepository, SessionInterface $session): Response
+    public function add($id, ProductRepository $productRepository, SessionInterface $session, FlashBagInterface $flashBag): Response
     {
         // 0. Sécurisation: est-ce que le produit existe ?
         $product = $productRepository->find($id);
@@ -43,10 +44,8 @@ class CartController extends AbstractController
         // 6. Enregistrer le tableau mis à jour dans la session
         $session->set('cart', $cart);
 
-        /** @var FlashBag */
-        $flashBag = $session->getBag('flashes');
-
-        $flashBag->add('success', "Le produit a bien été ajouté au panier");
+        $this->addFlash('success', "Le produit a bien été ajouté au panier");
+        // $flashBag->add('success', "Le produit a bien été ajouté au panier");
 
         return $this->redirectToRoute('product_show', [
             'slug' => $product->getSlug(),
