@@ -23,13 +23,13 @@
 						{{ item.product.name }}
 					</td>
 					<td>
-						{{ item.product.price / 100}}€
+						{{ item.product.price }}
 					</td>
 					<td>
 						{{ item.qty }}
 					</td>
 					<td>
-						{{ item.total / 100}}€
+						{{ item.total }}
 					</td>
 				</tr>
 			{% endfor %}
@@ -37,7 +37,7 @@
 		<tfoot>
 			<tr>
 				<td colspan="3">Total :</td>
-				<td>{{ total / 100}}€</td>
+				<td>{{ total }}</td>
 			</tr>
 		</tfoot>
 	</table>
