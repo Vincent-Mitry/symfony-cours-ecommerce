@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Entity\Purchase;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -42,6 +43,8 @@ class AppFixtures extends Fixture
 
         $manager->persist($admin);
 
+        $users = [];
+        
         for ($u = 1; $u < 6; $u++) {
             $user = new User;
 
@@ -51,7 +54,9 @@ class AppFixtures extends Fixture
                 ->setFullName($faker->name())
                 ->setPassword($hash);
 
-                $manager->persist($user);
+            $users[] = $user;
+
+            $manager->persist($user);
         }
 
         for($c = 0; $c < 3; $c++) {
@@ -72,6 +77,24 @@ class AppFixtures extends Fixture
                 
                 $manager->persist($product);
             }
+        }
+
+        for($p = 0; $p < mt_rand(20, 40); $p++)
+        {
+            $purchase = new Purchase;
+
+            $purchase->setFullName($faker->name)
+                    ->setAddress($faker->streetAddress())
+                    ->setPostalCode($faker->postcode())
+                    ->setCity($faker->city())
+                    ->setUser($faker->randomElement($users))
+                    ->setTotal(mt_rand(2000, 30000));
+                
+            if($faker->boolean(90)) {
+                $purchase->setStatus(Purchase::STATUS_PAID);
+            }
+
+            $manager->persist($purchase);
         }
 
         $manager->flush();
