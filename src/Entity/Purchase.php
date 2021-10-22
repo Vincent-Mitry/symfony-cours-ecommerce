@@ -56,10 +56,10 @@ class Purchase
      */
     private $user;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $purchasedAt;
 
     public function getFullName(): ?string
     {
@@ -141,6 +141,38 @@ class Purchase
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getPurchasedAt(): ?\DateTimeInterface
+    {
+        return $this->purchasedAt;
+    }
+
+    public function setPurchasedAt(\DateTimeInterface $purchasedAt): self
+    {
+        $this->purchasedAt = $purchasedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
 
         return $this;
     }
