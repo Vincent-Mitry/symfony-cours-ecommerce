@@ -24,13 +24,13 @@ class PurchasesListController extends AbstractController
         // 1. Nous devons nous assurer que la personne est connectée (sinon redirection vers la page d'accueil) -> Security
         /** @var User */
         $user = $this->getUser();
+       
+        // 2. Nous voulons savoir QUI est connecté -> Security
 
-            // 2. Nous voulons savoir QUI est connecté -> Security
-
-            // 3. Nous voulons passer l'utilisateur connecté à Twig afin d'afficher ses commandes ->Environlent de Twig / Response
-            
-            return $this->render('purchase/index.html.twig', [
-                'purchases' => $user->getPurchases()
-            ]);
+        // 3. Nous voulons passer l'utilisateur connecté à Twig afin d'afficher ses commandes ->Environlent de Twig / Response
+        
+        return $this->render('purchase/index.html.twig', [
+            'purchases' => $user->getPurchases()
+        ]);
     }
 }
