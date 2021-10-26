@@ -90,6 +90,8 @@ class PurchaseConfirmationController extends AbstractController
         // 8. Nous allons enregistrer la commande (EntityManagerInterface)
         $this->em->flush();
 
+        $this->cartService->empty();
+
         $this->addFlash('success', 'La commande a bien été enregistrée');
 
         return $this->redirectToRoute('purchase_index');

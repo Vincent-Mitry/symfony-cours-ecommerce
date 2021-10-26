@@ -58,6 +58,11 @@ class CartService
         $this->saveCart($cart);
     }
 
+    public function empty()
+    {
+        $this->saveCart([]);
+    }
+
     public function decrement(int $id)
     {
         $cart = $this->getCart();
