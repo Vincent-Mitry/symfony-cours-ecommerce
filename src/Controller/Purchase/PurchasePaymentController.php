@@ -20,7 +20,7 @@ class PurchasePaymentController extends AbstractController
             return $this->redirectToRoute('cart_show');
         }
         
-        \Stripe\Stripe::setApiKey('cleAPI');
+        \Stripe\Stripe::setApiKey('cleapi');
 
         $intent = \Stripe\PaymentIntent::create([
 
@@ -28,8 +28,6 @@ class PurchasePaymentController extends AbstractController
     
             'currency' => 'eur',
         ]);
-
-        dd($intent->client_secret);
 
         return $this->render('purchase/payment.html.twig', [
             'clientSecret' => $intent->client_secret

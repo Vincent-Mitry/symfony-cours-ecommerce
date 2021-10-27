@@ -5,5 +5,58 @@
 {% endblock %}
 
 {% block body %}
-	<h2>Paiement de la commande</h2>
+	<h1>Paiement de la commande</h1>
+
+	<form id="payment-form">
+		<div id="card-element"><!--Stripe.js injects the Payment Element--></div>
+		<button id="submit" class="btn btn-success">
+			<div class="spinner hidden" id="spinner"></div>
+			<span id="button-text">Payer avec Stripe!</span>
+		</button>
+		<p id="card-error" role="alert"></p>
+	</form>
+{% endblock %}
+
+{% block javascripts %}
+	{# ligne 13 : charge les scripts parents pour qu'ils ne soient pas écrasés #}
+	{{ parent() }}
+	<script src="https://js.stripe.com/v3/"></script>
+	<script>
+		const clientSecret = '{{ clientSecret }}';
+
+		const stripe = Stripe("pk_test_51Joqo6AO33uMRShUq4Ibk7lKEwdvI4oUs3BdXdvBFXViLWldkV8OLH1yCT49DM2mtjhZMneXUk9NL7dDYFUUk7ET00iIHqQfeF");
+
+		const elements = stripe.elements();
+
+		const card = elements.create("card");
+
+		// Stripe injects an iframe into the DOM
+		card.mount("#card-element");
+
+		card.on("change", function (event) { // Disable the Pay button if there are no card details in the Element
+			document.querySelector("button").disabled = event.empty;
+			document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
+		});
+
+		const form = document.getElementById("payment-form");
+
+		form.addEventListener("submit", function (event) {
+			
+			event.preventDefault();
+			// Complete payment when the submit button is clicked
+
+			stripe.confirmCardPayment(clientSecret, {
+			payment_method: {
+			card: card
+			}
+			}).then(function (result) {
+			if (result.error) { // Show error to your customer
+			console.log(result.error.message);
+			} else { // The payment succeeded!
+			console.log(result);
+			}
+			});
+
+		});
+	</script>
 {% endblock %}
