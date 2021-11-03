@@ -37,8 +37,8 @@ services:
 
     App\Stripe\StripeService:
         arguments:
-            $secretKey: 
-            $publicKey: 
+            $secretKey: "%env(STRIPE_SECRET_KEY)%"
+            $publicKey: "%env(STRIPE_PUBLIC_KEY)%"
 
     App\Taxes\Detector:
         arguments:
