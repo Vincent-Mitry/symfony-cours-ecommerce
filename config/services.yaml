@@ -43,3 +43,13 @@ services:
     App\Taxes\Detector:
         arguments:
             $seuil: 100
+    
+    App\EventDispatcher\PrenomListener:
+        tags: 
+            [
+                {
+                    name: kernel.event_listener,
+                    event: kernel.request,
+                    method: addPrenomToAttributes,
+                },
+            ]
