@@ -35,6 +35,11 @@ services:
 
     Cocur\Slugify\Slugify: ~
 
+    App\Stripe\StripeService:
+        arguments:
+            $secretKey: 
+            $publicKey: 
+
     App\Taxes\Detector:
         arguments:
             $seuil: 100
